@@ -7,19 +7,18 @@ import { IServerConfiguration } from './config/server';
 import { IDatabase } from './config/database';
 import { IPluginOptions, IPlugin } from './interfaces/plugin.interface';
 
+import { initAPI } from './api';
 
 export async function init (serverConfig: IServerConfiguration, database: IDatabase): Promise<Hapi.Server> {
     
     try {
         console.log('\x1Bc');
         console.log(chalk.yellow(` Initializing API Server with Environment ${process.env.NODE_ENV || 'dev' } ...\n`));
-        const env = process.env.NODE_ENV || 'dev';
-        const serverConfig: any = config.server[env];
 
         const serverOpts = {
             debug: { request: ['error'] },
-            host: config.host,
-            port: config.port,
+            host: 'localhost',
+            port: serverConfig.port,
             router: { isCaseSensitive: false, stripTrailingSlash: true },
             routes: {
                 cors: {
@@ -59,7 +58,8 @@ export async function init (serverConfig: IServerConfiguration, database: IDatab
             }
 
             console.log (chalk.green("All plugins registered successfully"));
-            // TODO: implement API route plugin registration 
+            
+            initAPI(server, config, database);
         };
 
         await initializePlugins();

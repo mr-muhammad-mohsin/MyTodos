@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 const chalk = require ("chalk");
 
 import * as Server from './server';
@@ -25,7 +26,10 @@ const init = async (config, db) => {
         console.log(`\n`);
         console.log(chalk.green(' Server is now running @:', server.info.uri));
 
+        
     } catch (err) {
+        console.log(err);
+    
         console.error (chalk.red(err));
         throw err;
     } 

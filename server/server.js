@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -19,17 +20,16 @@ const config = require("config-yml");
 const chalk = require("chalk");
 const Boom = require('boom');
 const Hapi = __importStar(require("@hapi/hapi"));
+const api_1 = require("./api");
 function init(serverConfig, database) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             console.log('\x1Bc');
             console.log(chalk.yellow(` Initializing API Server with Environment ${process.env.NODE_ENV || 'dev'} ...\n`));
-            const env = process.env.NODE_ENV || 'dev';
-            const serverConfig = config.server[env];
             const serverOpts = {
                 debug: { request: ['error'] },
-                host: config.host,
-                port: config.port,
+                host: 'localhost',
+                port: serverConfig.port,
                 router: { isCaseSensitive: false, stripTrailingSlash: true },
                 routes: {
                     cors: {
@@ -63,7 +63,7 @@ function init(serverConfig, database) {
                     yield target.register(server, options);
                 }
                 console.log(chalk.green("All plugins registered successfully"));
-                // TODO: implement API route plugin registration 
+                api_1.initAPI(server, config, database);
             });
             yield initializePlugins();
             return server;

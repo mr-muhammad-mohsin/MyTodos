@@ -5,10 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const config = require("config-yml");
 const mongoose_1 = __importDefault(require("mongoose"));
+const todo_1 = require("../api/todo/todo");
 function init() {
     mongoose_1.default.Promise = Promise;
     const env = process.env.NODE_ENV || 'dev';
-    const dbConfig = config.db[env];
+    const dbConfig = config.db;
     //    const connStr: string = `mongodb://${dbConfig.dbuser}:${dbConfig.dbpass}@${dbConfig.uri}/${dbConfig.db}`;
     const connStr = `mongodb://localhost:27017/${dbConfig.db}`;
     mongoose_1.default.set('useNewUrlParser', true);
@@ -24,7 +25,9 @@ function init() {
         .once('open', () => {
         console.log(`Successfully connected to the database: ${dbConfig.db.toUpperCase()}`);
     });
-    return {};
+    return {
+        todo: todo_1.Todo
+    };
 }
 exports.init = init;
 //# sourceMappingURL=database.js.map

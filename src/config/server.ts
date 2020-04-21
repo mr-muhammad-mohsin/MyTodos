@@ -9,10 +9,8 @@ export interface IServerConfiguration {
 
 export function getServerConfig (): IServerConfiguration {
     const env = process.env.NODE_ENV || 'dev';
-    console.log(env , config.server);
     
-
-    const serverConfig: any = config.server.dev;
+    const serverConfig: any = config.server;
 
     console.log(serverConfig);
 
@@ -20,7 +18,7 @@ export function getServerConfig (): IServerConfiguration {
         host: serverConfig.string,
         port: serverConfig.port,
         routePrefix: '/',
-        plugins: ['good', 'cors']
+        plugins: ['good', 'cors', 'inert', 'swagger']
     };
 } 
 

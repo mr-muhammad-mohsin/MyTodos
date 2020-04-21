@@ -9,7 +9,7 @@ export default (): IPlugin => {
         register: async (server: Hapi.Server): Promise<void> => {
             const options = {
                 ops: {
-                    interval: 1000
+                    interval: 60000
                 },
                 reporters: {
                     myConsoleReporter: [

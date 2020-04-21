@@ -3,14 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const config = require("config-yml");
 function getServerConfig() {
     const env = process.env.NODE_ENV || 'dev';
-    console.log(env, config.server);
-    const serverConfig = config.server.dev;
+    const serverConfig = config.server;
     console.log(serverConfig);
     return {
         host: serverConfig.string,
         port: serverConfig.port,
         routePrefix: '/',
-        plugins: ['good', 'cors']
+        plugins: ['good', 'cors', 'inert', 'swagger']
     };
 }
 exports.getServerConfig = getServerConfig;
